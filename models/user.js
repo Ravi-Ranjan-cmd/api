@@ -11,7 +11,8 @@ var UserSchema = new Schema({
   },
   wpassword: {
     type: String,
-    required: true
+    required: true,
+    
   },
   wname: {
     type: String,
@@ -73,3 +74,25 @@ var UserSchema = new Schema({
 });
 
 module.exports = mongoose.model('user', UserSchema);
+module.exports = function(user) {
+  user.isValid(function (valid) {
+    if (valid) res.render({user: user});
+    else res.flash('error', 'User is not valid'), console.log(user.errors), res.redirect('/users');
+});
+  user.validatesPresenceOf('name', 'email');
+  user.validatesLengthOf('password', {min: 10, message: {min: 'Password is too short'}});
+  user.validatesInclusionOf('gender', {in: ['male', 'female']});
+  user.validatesNumericalityOf('age', {int: true});
+  user.validatesUniquenessOf('email', {message: 'email is not unique'});
+  user.validatesNumericalityOf('mobile', {int: true});
+  user.validatesNumericalityOf('aadhar', {int: true});
+  user.validatespresenceof('SecAns');
+  user.validatesPresenceOf('SecQue');
+  user.validatesPresenceOf('skill');
+  user.validatesNumericalityOf('experience',{int:true});
+  user.validatesPresenceOf('occupation');
+  user.validatesNumericalityOf('pincode',{int:true});
+  user.validatesPresenceOf('state');
+  user.validatesPresenceOf('nearcity');
+  user.validatesPresenceOf('address'); 
+};
